@@ -1,0 +1,30 @@
+.App {
+    margin: 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.cell {
+	width: 50px;
+	height: 50px;
+	border: 1px solid black;
+	align-items: center;
+	position: relative;
+	cursor: pointer;
+  }
+
+  .row {
+	display: flex;
+  }
+
+  #board {
+	width: 50*10px;
+	height: 50*10px;
+  }
+
+
+  
+  #main {
+	display: inline-flex;
+	
+  }
