@@ -12,7 +12,7 @@ export const ContextShipState = createContext({
 });
 
 export function MainPage() {
-	const [ chooseShip, setChoseShip ] = useState(false);
+	const [ shipSize, setShipSize ] = useState(null);
 	const [ shipState, setShipState ] = useState(false);
 
 	const amountOfShip = {
@@ -21,11 +21,16 @@ export function MainPage() {
 		threeCellShip: [ 3, 2 ],
 		fourCellShip: [ 4, 1 ]
 	};
-	const value = { chooseShip, setChoseShip };
+	const value = { shipState, setShipState };
 
 	function chooseShipFromList(e) {
-		setChoseShip(true);
+		setShipState(true);
 		console.log(e.target.id);
+		if (e.target.id === 'four') {
+		} else if (e.target.id === 'three') {
+		} else if (e.target.id === 'two') {
+		} else {
+		}
 	}
 
 	return (
@@ -35,6 +40,15 @@ export function MainPage() {
 					<div>Список кораблей</div>
 					<button id="one" onClick={chooseShipFromList}>
 						одна клетка
+					</button>
+					<button id="two" onClick={chooseShipFromList}>
+						две клетки
+					</button>
+					<button id="three" onClick={chooseShipFromList}>
+						три клетки
+					</button>
+					<button id="four" onClick={chooseShipFromList}>
+						четыре клетки
 					</button>
 					<Board />
 				</div>

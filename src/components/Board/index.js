@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { ContextChoosenShip } from '../Main';
+import { ContextChoosenShip, ContextShipState } from '../Main';
 
 export function Board() {
 	const { chooseShip, setChoseShip } = useContext(ContextChoosenShip);
+	const { shipState, setShipState } = useContext(ContextShipState);
 	const [ forbiddenArrayOfCells, setForbiddenArrayOfCells ] = useState([]);
 	const size = 10;
 	const mappedShips = [];
@@ -63,7 +64,7 @@ export function Board() {
 			let columnIndex = j;
 			let cellId = rowIndex + '_' + columnIndex;
 			async function addShipOnMap(e) {
-				if (chooseShip === true) {
+				if (shipState === true) {
 					const idInForbiddenArray = forbiddenArrayOfCells.find((id) => cellId === id);
 					if (idInForbiddenArray) {
 						console.log('нельзя ставить корабль тут');
@@ -71,7 +72,7 @@ export function Board() {
 						mappedShips.push(cellId);
 						e.currentTarget.style.backgroundColor = 'red';
 						addIdOfCellsWhereYouCantAddShipNow(cellId);
-						setChoseShip(false);
+						setShipState(false);
 					}
 				}
 			}
