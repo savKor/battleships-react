@@ -1,59 +1,80 @@
 import { Board } from './Board';
 import React, { createContext, useState } from 'react';
 
+export const ContextShipPosition = createContext({
+	shipPosition: null,
+	setShipPosition: () => {}
+});
+
 export const ContextChoosenShip = createContext({
-	chooseShip: null,
-	setChoseShip: () => {}
+	choosenShipType: null,
+	setChoosenShipType: () => {}
 });
 
 export const ContextShipState = createContext({
-	shipState: null,
-	setShipState: () => {}
+	stateAreYouChooseTheShip: null,
+	setStateAreYouChooseTheShip: () => {}
 });
 
 export function MainPage() {
-	const [ shipSize, setShipSize ] = useState(null);
-	const [ shipState, setShipState ] = useState(false);
+	const [ choosenShipType, setChoosenShipType ] = useState([]);
+	const [ stateAreYouChooseTheShip, setStateAreYouChooseTheShip ] = useState(false);
+	const [ shipPosition, setShipPosition ] = useState('horizontal');
 
-	const amountOfShip = {
-		oneCellShip: [ 1, 4 ],
-		twoCellShip: [ 2, 3 ],
-		threeCellShip: [ 3, 2 ],
-		fourCellShip: [ 4, 1 ]
+	const shipType = {
+		oneCellShip: [ 1, 4, 'oneCellShip' ],
+		twoCellShip: [ 2, 3, 'twoCellShip' ],
+		threeCellShip: [ 3, 2, 'threeCellShip' ],
+		fourCellShip: [ 4, 1, 'fourCellShip' ]
 	};
-	const value = { shipState, setShipState };
 
-	function chooseShipFromList(e) {
-		setShipState(true);
-		console.log(e.target.id);
-		if (e.target.id === 'four') {
-		} else if (e.target.id === 'three') {
-		} else if (e.target.id === 'two') {
+	const stateCheck = { stateAreYouChooseTheShip, setStateAreYouChooseTheShip };
+	const position = { shipPosition, setShipPosition };
+	const choosenShip = { choosenShipType, setChoosenShipType };
+
+	async function chooseShipFromList(e) {
+		setStateAreYouChooseTheShip(true);
+		const key = e.target.id;
+		setChoosenShipType(shipType[key]);
+		console.log(choosenShipType);
+	}
+
+	async function changePosition() {
+		if (shipPosition === 'horizontal') {
+			setShipPosition('vertical');
 		} else {
+			setShipPosition('horizontal');
 		}
 	}
 
 	return (
 		<div className="spinner-border" role="status" id="main">
-			<ContextChoosenShip.Provider value={value}>
-				<div id="player-1">
-					<div>Список кораблей</div>
-					<button id="one" onClick={chooseShipFromList}>
-						одна клетка
-					</button>
-					<button id="two" onClick={chooseShipFromList}>
-						две клетки
-					</button>
-					<button id="three" onClick={chooseShipFromList}>
-						три клетки
-					</button>
-					<button id="four" onClick={chooseShipFromList}>
-						четыре клетки
-					</button>
-					<Board />
-				</div>
-				<div>Начать игру</div>
-			</ContextChoosenShip.Provider>
+			<ContextShipState.Provider value={stateCheck}>
+				<ContextChoosenShip.Provider value={choosenShip}>
+					<ContextShipPosition.Provider value={position}>
+						<button id="changePosition" onClick={changePosition}>
+							переверни вигуру
+						</button>
+						<div id="player-1">
+							<div>Список кораблей</div>
+							<button id="oneCellShip" onClick={chooseShipFromList}>
+								одна клетка
+							</button>
+							<button id="twoCellShip" onClick={chooseShipFromList}>
+								две клетки
+							</button>
+							<button id="threeCellShip" onClick={chooseShipFromList}>
+								три клетки
+							</button>
+							<button id="fourCellShip" onClick={chooseShipFromList}>
+								четыре клетки
+							</button>
+							<Board />
+						</div>
+						<div>Начать игру</div>
+					</ContextShipPosition.Provider>
+				</ContextChoosenShip.Provider>
+			</ContextShipState.Provider>
 		</div>
 	);
 }

@@ -17,8 +17,8 @@
 	display: flex;
   }
 
-  .cells-with-ships {
-	color: crimson;
+  .cell-with-ships {
+	background-color: red;
 	width: 50px;
 	height: 50px;
 	border: 1px solid black;

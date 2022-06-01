@@ -1,12 +1,22 @@
 import React, { useContext, useState } from 'react';
-import { ContextChoosenShip, ContextShipState } from '../Main';
+import { ContextChoosenShip, ContextShipPosition, ContextShipState } from '../Main';
+
+const count = {
+	oneCellShip: 0,
+	twoCellShip: 0,
+	threeCellShip: 0,
+	fourCellShip: 0
+};
+const size = 10;
 
 export function Board() {
-	const { chooseShip, setChoseShip } = useContext(ContextChoosenShip);
-	const { shipState, setShipState } = useContext(ContextShipState);
+	const { stateAreYouChooseTheShip, setStateAreYouChooseTheShip } = useContext(ContextShipState);
+	const { shipPosition } = useContext(ContextShipPosition);
+	const { choosenShipType } = useContext(ContextChoosenShip);
 	const [ forbiddenArrayOfCells, setForbiddenArrayOfCells ] = useState([]);
-	const size = 10;
-	const mappedShips = [];
+	const [ countShips, setCountShips ] = useState(count);
+	const [ shipsOnMap, setShipsOnMap ] = useState([]);
+
 	const matrix = createMatrix();
 	const field = [];
 
@@ -26,7 +36,8 @@ export function Board() {
 		return row;
 	}
 
-	function addIdOfCellsWhereYouCantAddShipNow(cellId) {
+	// добавление тех координат на которые уже нельзя добавлять корабли
+	function addCoordinatesWhereYouCantAddShipNow(cellId) {
 		const splitId = cellId.split('_');
 		const idNumbers = splitId.map(Number);
 		const row = idNumbers[1];
@@ -55,32 +66,135 @@ export function Board() {
 		}
 	}
 
-	for (let i = 0; i < matrix.length; i++) {
-		const choosenRow = matrix[i];
-		let rowIndex = i;
-		const cells = [];
+	function getNewIdFromColumn(newNumber, row, column) {
+		let shipElement;
+		let newColumn = column + newNumber;
+		let newCellId = newColumn + '_' + row;
+		const idInForbiddenArray = forbiddenArrayOfCells.find((id) => newCellId === id);
+
+		if (idInForbiddenArray || newColumn < 0 || 10 <= newColumn) {
+			newColumn = column - newNumber;
+			newCellId = newColumn + '_' + row;
+			const idInForbiddenArray = forbiddenArrayOfCells.find((id) => newCellId === id);
+			if (idInForbiddenArray || newColumn < 0 || 10 <= newColumn) {
+				console.log('Клетка уже занята');
+				shipElement = false;
+			} else {
+				shipElement = newCellId;
+			}
+		} else {
+			shipElement = newCellId;
+		}
+
+		return shipElement;
+	}
+
+	function getNewIdFromRow(newNumber, row, column) {
+		let shipElement;
+		let newRow = row + newNumber;
+		let newCellId = column + '_' + newRow;
+		const idInForbiddenArray = forbiddenArrayOfCells.find((id) => newCellId === id);
+		if (idInForbiddenArray || newRow < 0 || 10 <= newRow) {
+			newRow = row - newNumber;
+			newCellId = column + '_' + newRow;
+			const idInForbiddenArray = forbiddenArrayOfCells.find((id) => newCellId === id);
+			if (idInForbiddenArray || newRow < 0 || 10 <= newRow) {
+				console.log('Клетка уже занята');
+				shipElement = false;
+			} else {
+				shipElement = newCellId;
+			}
+		} else {
+			shipElement = newCellId;
+		}
+
+		return shipElement;
+	}
+
+	function getIdsOfShips(row, column) {
+		let shipSize = [];
+		for (let i = 0; i < choosenShipType[0]; i++) {
+			let cycleNumber = i;
+			let shipElement;
+			if (shipPosition === 'horizontal') {
+				shipElement = getNewIdFromColumn(cycleNumber, row, column);
+				if (shipElement !== false) {
+					shipSize.push(shipElement);
+				}
+			} else {
+				shipElement = getNewIdFromRow(cycleNumber, row, column);
+				if (shipElement !== false) {
+					shipSize.push(shipElement);
+				}
+			}
+		}
+
+		return shipSize;
+	}
+
+	function addCoordinates(idsAndSizeOfShip) {
+		const newCountOfShips = countShips;
+		const key = choosenShipType[2];
+		if (idsAndSizeOfShip.length === choosenShipType[0] && newCountOfShips[key] !== choosenShipType[1]) {
+			newCountOfShips[key] += 1;
+			setCountShips(newCountOfShips);
+			for (let i = 0; i < idsAndSizeOfShip.length; i++) {
+				const mappedShips = shipsOnMap;
+				let newCellId = idsAndSizeOfShip[i];
+				mappedShips.push(newCellId);
+				setShipsOnMap(mappedShips);
+				addCoordinatesWhereYouCantAddShipNow(newCellId);
+			}
+			setStateAreYouChooseTheShip(false);
+		} else if (newCountOfShips[key] === choosenShipType[1]) {
+			alert('Все корабли этого типа уже были добавлены');
+		} else {
+			console.log('Нельзя ставить тут корабль');
+			alert('Нельзя ставить тут корабль');
+		}
+	}
+
+	function getCells(rowIndex, choosenRow) {
+		let cells = [];
 
 		for (let j = 0; j < choosenRow.length; j++) {
 			let columnIndex = j;
 			let cellId = rowIndex + '_' + columnIndex;
-			async function addShipOnMap(e) {
-				if (shipState === true) {
-					const idInForbiddenArray = forbiddenArrayOfCells.find((id) => cellId === id);
-					if (idInForbiddenArray) {
-						console.log('нельзя ставить корабль тут');
-					} else {
-						mappedShips.push(cellId);
-						e.currentTarget.style.backgroundColor = 'red';
-						addIdOfCellsWhereYouCantAddShipNow(cellId);
-						setShipState(false);
-					}
+
+			// добавление корабля на сетку
+
+			function addShipOnMap(e) {
+				const offsetX = e.nativeEvent;
+				console.log(offsetX);
+				if (stateAreYouChooseTheShip === true) {
+					const splitId = cellId.split('_');
+					const idNumbers = splitId.map(Number);
+					const row = idNumbers[1];
+					const column = idNumbers[0];
+					let idsAndSizeOfShip = getIdsOfShips(row, column);
+					addCoordinates(idsAndSizeOfShip);
+				} else {
+					alert('Выбери корабль');
 				}
 			}
 
-			const cell = <div id={cellId} className="cell" onClick={addShipOnMap} />;
+			const idOfCellWithAShip = shipsOnMap.find((id) => cellId === id);
 
-			cells[j] = cell;
+			if (idOfCellWithAShip) {
+				const cell = <div id={cellId} className="cell-with-ships" onClick={addShipOnMap} />;
+				cells[j] = cell;
+			} else {
+				const cell = <div id={cellId} className="cell" onClick={addShipOnMap} />;
+				cells[j] = cell;
+			}
 		}
+		return cells;
+	}
+
+	for (let i = 0; i < matrix.length; i++) {
+		const choosenRow = matrix[i];
+		let rowIndex = i;
+		const cells = getCells(rowIndex, choosenRow);
 
 		const row = (
 			<div id={rowIndex} className="row">
@@ -92,4 +206,45 @@ export function Board() {
 	}
 
 	return <div id="board">{field}</div>;
+}
+
+//newRow
+
+function getNewIdFromRow(cycleNumber, row, column) {
+	let shipElement;
+	let newRow;
+	let cellId;
+	if (idInForbiddenArray || newRow < 0 || 10 <= newRow) {
+		newRow = row - cycleNumber;
+		cellId = column + '_' + newRow;
+		const idInForbiddenArray = forbiddenArrayOfCells.find((id) => cellId === id);
+		if (idInForbiddenArray || newRow < 0 || 10 <= newRow) {
+			console.log('Клетка уже занята');
+			shipElement = false;
+		} else {
+			shipElement = cellId;
+		}
+	} else {
+		shipElement = cellId;
+	}
+
+	if (cycleNumber === 0) {
+		cellId = column + '_' + row;
+		const idInForbiddenArray = forbiddenArrayOfCells.find((id) => cellId === id);
+		if (idInForbiddenArray) {
+			console.log('Клетка уже занята');
+			shipElement = false;
+		} else {
+			shipElement = cellId;
+		}
+	} else if (0 < cycleNumber < 3) {
+		if (cycleNumber % 2 === 0) {
+			newRow = row + 1;
+		} else {
+			newRow = row - 1;
+		}
+	} else {
+	}
+
+	return shipElement;
 }
