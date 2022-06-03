@@ -48,29 +48,47 @@ export function MainPage() {
 	}
 
 	return (
-		<div className="spinner-border" role="status" id="main">
+		<div id="main">
+			<div id="list-of-ship">
+				<div id="oneCellShip">
+					<div className="ship-type" />
+				</div>
+				<div id="twoCellShip">
+					<div className="ship-type" />
+					<div className="ship-type" />
+				</div>
+				<div id="threeCellShip">
+					<div className="ship-type" />
+					<div className="ship-type" />
+					<div className="ship-type" />
+				</div>
+				<div id="fourCellShip">
+					<div className="ship-type" />
+					<div className="ship-type" />
+					<div className="ship-type" />
+					<div className="ship-type" />
+				</div>
+			</div>
 			<ContextShipState.Provider value={stateCheck}>
 				<ContextChoosenShip.Provider value={choosenShip}>
 					<ContextShipPosition.Provider value={position}>
 						<button id="changePosition" onClick={changePosition}>
-							переверни вигуру
+							переверни фигуру
 						</button>
-						<div id="player-1">
-							<div>Список кораблей</div>
-							<button id="oneCellShip" onClick={chooseShipFromList}>
-								одна клетка
-							</button>
-							<button id="twoCellShip" onClick={chooseShipFromList}>
-								две клетки
-							</button>
-							<button id="threeCellShip" onClick={chooseShipFromList}>
-								три клетки
-							</button>
-							<button id="fourCellShip" onClick={chooseShipFromList}>
-								четыре клетки
-							</button>
-							<Board />
-						</div>
+						<div>Список кораблей</div>
+						<button id="oneCellShip" onClick={chooseShipFromList}>
+							одна клетка
+						</button>
+						<button id="twoCellShip" onClick={chooseShipFromList}>
+							две клетки
+						</button>
+						<button id="threeCellShip" onClick={chooseShipFromList}>
+							три клетки
+						</button>
+						<button id="fourCellShip" onClick={chooseShipFromList}>
+							четыре клетки
+						</button>
+						<Board />
 						<div>Начать игру</div>
 					</ContextShipPosition.Provider>
 				</ContextChoosenShip.Provider>
