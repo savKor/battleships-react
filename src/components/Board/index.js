@@ -24,14 +24,21 @@ export const ContextShipOnMap = createContext({
 	setShipsOnMap: () => {}
 });
 
+export const ContextDisplaedShipOnMap = createContext({
+	arrayOfShownShipOnMap: null,
+	setArrayOfShownShipOnMap: () => {}
+});
+
 export function Board() {
 	const [ countShips, setCountShips ] = useState(count);
 	const [ shipsOnMap, setShipsOnMap ] = useState([]);
 	const [ arrayOfForbiddenCells, setArrayOfForbiddenCells ] = useState([]);
+	const [ arrayOfShownShipOnMap, setArrayOfShownShipOnMap ] = useState([]);
 
 	const counter = { countShips, setCountShips };
 	const shipArray = { shipsOnMap, setShipsOnMap };
 	const forbiddenArray = { arrayOfForbiddenCells, setArrayOfForbiddenCells };
+	const displayShipOnMap = { arrayOfShownShipOnMap, setArrayOfShownShipOnMap };
 
 	function createMatrix() {
 		let matrix = [];
@@ -52,26 +59,22 @@ export function Board() {
 	const matrix = createMatrix();
 	const field = [];
 
-	function onAddToForbiddenArray(cells) {
-		setForbiddenArray((forbiddenArray) => ({ ...forbiddenArray, cells }));
-	}
-
 	for (let i = 0; i < matrix.length; i++) {
 		const colums = matrix[i];
 		let rowIndex = i;
-
 		const row = <Row rowIndex={rowIndex} colums={colums} />;
-
 		field[i] = row;
 	}
 
 	return (
-		<ContextCounter.Provider value={counter}>
-			<ContextForbiddenCells.Provider value={forbiddenArray}>
-				<ContextShipOnMap.Provider value={shipArray}>
-					<div id="board">{field}</div>
-				</ContextShipOnMap.Provider>
-			</ContextForbiddenCells.Provider>
-		</ContextCounter.Provider>
+		<ContextDisplaedShipOnMap.Provider value={displayShipOnMap}>
+			<ContextCounter.Provider value={counter}>
+				<ContextForbiddenCells.Provider value={forbiddenArray}>
+					<ContextShipOnMap.Provider value={shipArray}>
+						<div id="board">{field}</div>
+					</ContextShipOnMap.Provider>
+				</ContextForbiddenCells.Provider>
+			</ContextCounter.Provider>
+		</ContextDisplaedShipOnMap.Provider>
 	);
 }

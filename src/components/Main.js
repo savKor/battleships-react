@@ -46,27 +46,19 @@ export function MainPage() {
 			setShipPosition('horizontal');
 		}
 	}
-
 	return (
 		<div id="main">
 			<div id="list-of-ship">
-				<div id="oneCellShip">
-					<div className="ship-type" />
+				<div className="prison">
+					<div id="oneCellShip_chosen">
+						<div className="ship-type" id="oneCellShip_chosen" />
+					</div>
 				</div>
-				<div id="twoCellShip">
-					<div className="ship-type" />
-					<div className="ship-type" />
-				</div>
-				<div id="threeCellShip">
-					<div className="ship-type" />
-					<div className="ship-type" />
-					<div className="ship-type" />
-				</div>
-				<div id="fourCellShip">
-					<div className="ship-type" />
-					<div className="ship-type" />
-					<div className="ship-type" />
-					<div className="ship-type" />
+				<div className="prison">
+					<div id="twoCellShip_chosen">
+						<div className="ship-type" id="twoCellShip_chosen" />
+						<div className="ship-type" id="twoCellShip_chosen" />
+					</div>
 				</div>
 			</div>
 			<ContextShipState.Provider value={stateCheck}>
@@ -76,16 +68,16 @@ export function MainPage() {
 							переверни фигуру
 						</button>
 						<div>Список кораблей</div>
-						<button id="oneCellShip" onClick={chooseShipFromList}>
+						<button id="oneCellShip" class="type-of-ship" onClick={chooseShipFromList}>
 							одна клетка
 						</button>
-						<button id="twoCellShip" onClick={chooseShipFromList}>
+						<button id="twoCellShip" class="type-of-ship" onClick={chooseShipFromList}>
 							две клетки
 						</button>
-						<button id="threeCellShip" onClick={chooseShipFromList}>
+						<button id="threeCellShip" class="type-of-ship" onClick={chooseShipFromList}>
 							три клетки
 						</button>
-						<button id="fourCellShip" onClick={chooseShipFromList}>
+						<button id="fourCellShip" class="type-of-ship" onClick={chooseShipFromList}>
 							четыре клетки
 						</button>
 						<Board />
