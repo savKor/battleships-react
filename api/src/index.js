@@ -1,9 +1,21 @@
-const config = require('./config')
-const appServer = require('./server')
+const WebSocket = require('ws');
 
-// Boot Server
-const port = process.env.PORT || config.port
+const wss = new WebSocket.Server({ port: 8082 });
 
-appServer.listen(port, () => {
-  console.log('Server running on', port)
-})
+wss.getUniqueID = function() {
+	function s4() {
+		return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+	}
+	return s4() + s4() + '-' + s4();
+};
+
+wss.on('connection', (ws) => {
+	ws.id = wss.getUniqueID();
+	console.log(`New client connected with id: ${ws.id}`);
+
+	ws.onmessage = ({ data }) => {};
+
+	ws.onclose = function() {
+		console.log(`Client ${ws.id} has disconnected!`);
+	};
+});
