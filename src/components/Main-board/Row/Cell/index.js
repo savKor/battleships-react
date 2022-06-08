@@ -4,6 +4,7 @@ import { ContextForbiddenCells } from '../..';
 import {
 	selectState,
 	updateArrayOfCellsDisplaedOnMap,
+	updateChoosenShipType,
 	updateCountShips,
 	updateStateAreYouChooseTheShip
 } from '../../../../features/counter/storageSlice';
@@ -112,6 +113,7 @@ export function Cells({ rowIndex, colums }) {
 				addIdsOfCellsWhereYouCantAddShipNow(idsOfShip[i]);
 			}
 			dispatch(updateStateAreYouChooseTheShip(false));
+			dispatch(updateChoosenShipType([]));
 			setShipsOnMap(mappedShips);
 		} else if (countShips[key] === choosenShipType[1]) {
 			alert('Все корабли этого типа уже были добавлены. Выберите другой корабль');

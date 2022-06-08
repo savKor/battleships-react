@@ -15,7 +15,6 @@ export const counterSlice = createSlice({
 		choosenShipType: [],
 		stateAreYouChooseTheShip: false,
 		countShips: count,
-
 		arrayOfCellsDisplaedOnMap: []
 	},
 
