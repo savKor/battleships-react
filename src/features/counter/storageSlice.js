@@ -9,13 +9,13 @@ const count = {
 
 export const counterSlice = createSlice({
 	name: 'storage',
-
 	initialState: {
 		shipPosition: 'horizontal',
 		choosenShipType: [],
 		stateAreYouChooseTheShip: false,
 		countShips: count,
-		arrayOfCellsDisplaedOnMap: []
+		arrayOfCellsDisplaedOnMap: [],
+		username: null
 	},
 
 	reducers: {
@@ -40,6 +40,10 @@ export const counterSlice = createSlice({
 
 		updateArrayOfCellsDisplaedOnMap: (state, action) => {
 			state.arrayOfCellsDisplaedOnMap = action.payload;
+		},
+
+		updateUsername: (state, action) => {
+			state.username = action.payload;
 		}
 	}
 });
@@ -49,7 +53,8 @@ export const {
 	updateChoosenShipType,
 	updateStateAreYouChooseTheShip,
 	updateCountShips,
-	updateArrayOfCellsDisplaedOnMap
+	updateArrayOfCellsDisplaedOnMap,
+	updateUsername
 } = counterSlice.actions;
 
 export const incrementAsync = (action, fn) => (dispatch) => {

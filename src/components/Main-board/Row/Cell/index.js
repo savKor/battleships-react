@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ContextForbiddenCells } from '../..';
+import { ContextShipOnMap } from '../../../../App';
 import {
 	selectState,
 	updateArrayOfCellsDisplaedOnMap,
@@ -9,7 +10,6 @@ import {
 	updateStateAreYouChooseTheShip
 } from '../../../../features/counter/storageSlice';
 import { getRowAndColumn } from '../../../../storage';
-import { ContextShipOnMap } from '../../../Main';
 
 export function Cells({ rowIndex, colums }) {
 	const { arrayOfForbiddenCells, setArrayOfForbiddenCells } = useContext(ContextForbiddenCells);
