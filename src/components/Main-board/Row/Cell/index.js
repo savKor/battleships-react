@@ -1,21 +1,18 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ContextForbiddenCells } from '../..';
-import { ContextShipOnMap } from '../../../../App';
 import {
 	selectState,
 	updateArrayOfCellsDisplaedOnMap,
+	updateArrayOfForbiddenCells,
 	updateChoosenShipType,
 	updateCountShips,
+	updateShipsOnMap,
 	updateStateAreYouChooseTheShip
 } from '../../../../features/counter/storageSlice';
 import { getRowAndColumn } from '../../../../storage';
 
 export function Cells({ rowIndex, colums }) {
-	const { arrayOfForbiddenCells, setArrayOfForbiddenCells } = useContext(ContextForbiddenCells);
-	const { shipsOnMap, setShipsOnMap } = useContext(ContextShipOnMap);
 	const [ classForCell ] = useState('cell');
-
 	const store = useSelector(selectState);
 	const dispatch = useDispatch();
 
@@ -24,6 +21,8 @@ export function Cells({ rowIndex, colums }) {
 	const arrayOfCellsDisplaedOnMap = store.arrayOfCellsDisplaedOnMap;
 	const stateAreYouChooseTheShip = store.stateAreYouChooseTheShip;
 	const choosenShipType = store.choosenShipType;
+	const arrayOfForbiddenCells = store.arrayOfForbiddenCells;
+	const shipsOnMap = store.shipsOnMap;
 
 	let cells = [];
 
@@ -45,9 +44,7 @@ export function Cells({ rowIndex, colums }) {
 			if (0 <= columnIndex && columnIndex < 10) {
 				let idOfCellWhereYouCanNoLongerAddShip = columnIndex + '_' + rowIndex;
 				if (!arrayOfForbiddenCells.find((id) => idOfCellWhereYouCanNoLongerAddShip === id)) {
-					const newArray = arrayOfForbiddenCells;
-					newArray.push(idOfCellWhereYouCanNoLongerAddShip);
-					setArrayOfForbiddenCells(newArray);
+					dispatch(updateArrayOfForbiddenCells(idOfCellWhereYouCanNoLongerAddShip));
 				}
 			}
 		}
@@ -107,14 +104,12 @@ export function Cells({ rowIndex, colums }) {
 		if (idsOfShip.length === choosenShipType[0] && countShips[key] !== choosenShipType[1]) {
 			dispatch(updateArrayOfCellsDisplaedOnMap([]));
 			dispatch(updateCountShips(key));
-			const mappedShips = [ ...shipsOnMap ];
 			for (let i = 0; i < idsOfShip.length; i++) {
-				mappedShips.push(idsOfShip[i]);
+				dispatch(updateShipsOnMap(idsOfShip[i]));
 				addIdsOfCellsWhereYouCantAddShipNow(idsOfShip[i]);
 			}
 			dispatch(updateStateAreYouChooseTheShip(false));
 			dispatch(updateChoosenShipType([]));
-			setShipsOnMap(mappedShips);
 		} else if (countShips[key] === choosenShipType[1]) {
 			alert('Все корабли этого типа уже были добавлены. Выберите другой корабль');
 		} else {

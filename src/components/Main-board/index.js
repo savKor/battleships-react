@@ -1,17 +1,9 @@
-import React, { createContext, useState } from 'react';
+import React from 'react';
 import { Row } from './Row';
 
 const size = 10;
 
-export const ContextForbiddenCells = createContext({
-	arrayOfForbiddenCells: null,
-	setArrayOfForbiddenCells: () => {}
-});
-
 export function Board() {
-	const [ arrayOfForbiddenCells, setArrayOfForbiddenCells ] = useState([]);
-	const forbiddenArray = { arrayOfForbiddenCells, setArrayOfForbiddenCells };
-
 	function createMatrix() {
 		let matrix = [];
 		for (let i = 0; i < size; i++) {
@@ -38,9 +30,5 @@ export function Board() {
 		field[i] = row;
 	}
 
-	return (
-		<ContextForbiddenCells.Provider value={forbiddenArray}>
-			<div id="board">{field}</div>
-		</ContextForbiddenCells.Provider>
-	);
+	return <div id="board">{field}</div>;
 }

@@ -1,42 +1,36 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { ws } from '../App';
+import { selectState, updateDataForTheGame } from '../features/counter/storageSlice';
 import { Board } from './Battle-board';
 
 export function BattlePage() {
-	const [ dataForTheGame, setDataForTheGame ] = useState(false);
+	const store = useSelector(selectState);
+	const dispatch = useDispatch();
+	const dataForTheGame = store.dataForTheGame;
 
 	let battle;
 
 	ws.onmessage = function({ data }) {
-		debugger;
-		setDataForTheGame(data);
+		const object = JSON.parse(data);
+		dispatch(updateDataForTheGame(object));
 	};
 
-	if (dataForTheGame === false) {
+	if (dataForTheGame === null) {
 		battle = <div>жди</div>;
 	} else {
 		battle = (
 			<div id="main">
 				<div id="board-of-the-game">
-					<Board />
+					<Board playerNick={dataForTheGame.player1} />
 				</div>
-				<p>Сейчас ходит этот игрок</p>
+				<p>Сейчас ходит этот игрок:{dataForTheGame.turn}</p>
 				<div id="board-of-the-game">
-					<Board />
+					<Board playerNick={dataForTheGame.player2} />
 				</div>
 			</div>
 		);
 	}
 
-	return (
-		<div id="main">
-			<div id="board-of-the-game">
-				<Board />
-			</div>
-			<p>Сейчас ходит этот игрок</p>
-			<div id="board-of-the-game">
-				<Board />
-			</div>
-		</div>
-	);
+	return battle;
 }

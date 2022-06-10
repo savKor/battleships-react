@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React from 'react';
 import { Cells } from './Cell';
 
 export function Row(props) {

@@ -3,7 +3,7 @@ import { Row } from './Row';
 
 const size = 10;
 
-export function Board() {
+export function Board({ playerNick }) {
 	function createMatrix() {
 		let matrix = [];
 		for (let i = 0; i < size; i++) {
@@ -26,9 +26,14 @@ export function Board() {
 	for (let i = 0; i < matrix.length; i++) {
 		const colums = matrix[i];
 		let rowIndex = i;
-		const row = <Row rowIndex={rowIndex} colums={colums} />;
+		const row = <Row rowIndex={rowIndex} colums={colums} playerNick={playerNick} />;
 		field[i] = row;
 	}
 
-	return <div id="board">{field}</div>;
+	return (
+		<div>
+			<p>Это доска игрока {playerNick}</p>
+			<div id="board">{field}</div>
+		</div>
+	);
 }

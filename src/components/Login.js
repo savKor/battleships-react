@@ -6,18 +6,20 @@ import { selectState, updateUsername } from '../features/counter/storageSlice';
 
 export function LoginPage() {
 	const store = useSelector(selectState);
-	const username = store.username;
 	const dispatch = useDispatch();
-	let navigate = useNavigate();
+	const navigate = useNavigate();
+	const username = store.username;
 
 	function changeUsername(e) {
 		dispatch(updateUsername(e.target.value));
 	}
 
 	function handleLoginClick() {
-		ws.send(JSON.stringify(username));
-		let path = `/public/main/`;
-		navigate(path);
+		if ('WebSocket' in window) {
+			ws.send(JSON.stringify(username));
+			let path = `/public/main/`;
+			navigate(path);
+		}
 	}
 
 	return (

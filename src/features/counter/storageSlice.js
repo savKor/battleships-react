@@ -15,7 +15,10 @@ export const counterSlice = createSlice({
 		stateAreYouChooseTheShip: false,
 		countShips: count,
 		arrayOfCellsDisplaedOnMap: [],
-		username: null
+		arrayOfForbiddenCells: [],
+		shipsOnMap: [],
+		username: null,
+		dataForTheGame: null
 	},
 
 	reducers: {
@@ -42,8 +45,24 @@ export const counterSlice = createSlice({
 			state.arrayOfCellsDisplaedOnMap = action.payload;
 		},
 
+		updateArrayOfForbiddenCells: (state, action) => {
+			const arrayOfForbiddenCells = state.arrayOfForbiddenCells;
+			arrayOfForbiddenCells.push(action.payload);
+			state.arrayOfForbiddenCells = arrayOfForbiddenCells;
+		},
+
+		updateShipsOnMap: (state, action) => {
+			const shipsOnMap = state.shipsOnMap;
+			shipsOnMap.push(action.payload);
+			state.shipsOnMap = shipsOnMap;
+		},
+
 		updateUsername: (state, action) => {
 			state.username = action.payload;
+		},
+
+		updateDataForTheGame: (state, action) => {
+			state.dataForTheGame = action.payload;
 		}
 	}
 });
@@ -54,7 +73,10 @@ export const {
 	updateStateAreYouChooseTheShip,
 	updateCountShips,
 	updateArrayOfCellsDisplaedOnMap,
-	updateUsername
+	updateArrayOfForbiddenCells,
+	updateShipsOnMap,
+	updateUsername,
+	updateDataForTheGame
 } = counterSlice.actions;
 
 export const incrementAsync = (action, fn) => (dispatch) => {
