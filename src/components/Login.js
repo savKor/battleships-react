@@ -23,16 +23,18 @@ export function LoginPage() {
 	}
 
 	return (
-		<div id="login">
-			<input
-				type="text"
-				id="nicknameBox"
-				placeholder="Type your nickname here"
-				onChange={(e) => changeUsername(e)}
-			/>
-			<button id="send" title="Send Nickname!" onClick={handleLoginClick}>
-				Send Nickname
-			</button>
+		<div id="main">
+			<div id="login-form">
+				<input
+					type="text"
+					id="nickname-box"
+					placeholder="Type your nickname here"
+					onChange={(e) => changeUsername(e)}
+				/>
+				<button id="send" title="Send Nickname!" onClick={handleLoginClick}>
+					Send Nickname
+				</button>
+			</div>
 		</div>
 	);
 }

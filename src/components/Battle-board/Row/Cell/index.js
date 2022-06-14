@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ws } from '../../../../App';
-import { selectState } from '../../../../features/counter/storageSlice';
+import { selectState, updateCheckedCells } from '../../../../features/counter/storageSlice';
 
 export function Cells({ rowIndex, colums, playerNick }) {
 	const [ classForCell ] = useState('cell');
 	const store = useSelector(selectState);
 	const dispatch = useDispatch();
+	const checkedCells = store.checkedCells;
 	const username = store.username;
 	const dataForTheGame = store.dataForTheGame;
 	const turn = dataForTheGame.turn;
+	const winner = dataForTheGame.winner;
 	const player1 = dataForTheGame.player1;
 	const player2 = dataForTheGame.player2;
 	const arrayOfMissedShotPlayer1 = dataForTheGame.arrayOfMissedShotPlayer1;
@@ -20,13 +22,21 @@ export function Cells({ rowIndex, colums, playerNick }) {
 	let cells = [];
 
 	function checkTheCell(e) {
-		if (username === playerNick && username === turn) {
+		if (winner === null) {
 			const cellId = e.target.id;
-			ws.send(JSON.stringify(cellId));
-		} else if (username !== playerNick && username === turn) {
-			alert('Не ваша доска');
+			const cellThatNotInArray = !checkedCells.find((id) => cellId === id);
+			if (username === playerNick && username === turn && cellThatNotInArray === true) {
+				dispatch(updateCheckedCells(cellId));
+				ws.send(JSON.stringify(cellId));
+			} else if (username !== playerNick && username === turn) {
+				alert('Не ваша доска');
+			} else if (cellThatNotInArray == false) {
+				console.log('Ты уже проверял эту кнопку');
+			} else {
+				alert('Не ваш ход');
+			}
 		} else {
-			alert('Не ваш ход');
+			alert('Игра закончена');
 		}
 	}
 

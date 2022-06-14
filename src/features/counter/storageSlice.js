@@ -11,14 +11,15 @@ export const counterSlice = createSlice({
 	name: 'storage',
 	initialState: {
 		shipPosition: 'horizontal',
-		choosenShipType: [],
+		chosenShipType: [],
 		stateAreYouChooseTheShip: false,
 		countShips: count,
 		arrayOfCellsDisplaedOnMap: [],
 		arrayOfForbiddenCells: [],
 		shipsOnMap: [],
 		username: null,
-		dataForTheGame: null
+		dataForTheGame: null,
+		checkedCells: []
 	},
 
 	reducers: {
@@ -26,8 +27,8 @@ export const counterSlice = createSlice({
 			state.shipPosition = action.payload;
 		},
 
-		updateChoosenShipType: (state, action) => {
-			state.choosenShipType = action.payload;
+		updateChosenShipType: (state, action) => {
+			state.chosenShipType = action.payload;
 		},
 
 		updateStateAreYouChooseTheShip: (state, action) => {
@@ -63,20 +64,27 @@ export const counterSlice = createSlice({
 
 		updateDataForTheGame: (state, action) => {
 			state.dataForTheGame = action.payload;
+		},
+
+		updateCheckedCells: (state, action) => {
+			const checkedCells = state.checkedCells;
+			checkedCells.push(action.payload);
+			state.checkedCells = checkedCells;
 		}
 	}
 });
 
 export const {
 	updateShipPosition,
-	updateChoosenShipType,
+	updateChosenShipType,
 	updateStateAreYouChooseTheShip,
 	updateCountShips,
 	updateArrayOfCellsDisplaedOnMap,
 	updateArrayOfForbiddenCells,
 	updateShipsOnMap,
 	updateUsername,
-	updateDataForTheGame
+	updateDataForTheGame,
+	updateCheckedCells
 } = counterSlice.actions;
 
 export const incrementAsync = (action, fn) => (dispatch) => {

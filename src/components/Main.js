@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	selectState,
-	updateChoosenShipType,
+	updateChosenShipType,
 	updateShipPosition,
 	updateStateAreYouChooseTheShip
 } from '../features/counter/storageSlice';
@@ -16,7 +16,7 @@ export function MainPage() {
 	const store = useSelector(selectState);
 	const dispatch = useDispatch();
 	const shipPosition = store.shipPosition;
-	const choosenShipType = store.choosenShipType;
+	const chosenShipType = store.chosenShipType;
 	const countShips = store.countShips;
 	const shipsOnMap = store.shipsOnMap;
 
@@ -30,7 +30,7 @@ export function MainPage() {
 	async function chooseShipFromList(e) {
 		dispatch(updateStateAreYouChooseTheShip(true));
 		const key = e.target.id;
-		dispatch(updateChoosenShipType(shipType[key]));
+		dispatch(updateChosenShipType(shipType[key]));
 	}
 
 	async function changePosition() {
@@ -57,16 +57,10 @@ export function MainPage() {
 
 	return (
 		<div id="main">
-			<div id="ship-counter">
-				<p>Одноклеточные корабли {countShips.oneCellShip}</p>
-				<p>Двухклеточные корабли {countShips.twoCellShip}</p>
-				<p>Трёхклеточные корабли {countShips.threeCellShip}</p>
-				<p>Четырёхклеточные корабли {countShips.fourCellShip}</p>
-			</div>
 			<div>
 				<div id="info-position">
 					<p>
-						Корабль сейчас в {shipPosition} положении. Выбранный тип корабля: {choosenShipType[2]}
+						Корабль сейчас в {shipPosition} положении. Выбранный тип корабля: {chosenShipType[2]}
 					</p>
 				</div>
 				<div id="board-of-the-game">
@@ -76,16 +70,16 @@ export function MainPage() {
 							перевернуть корабль
 						</button>
 						<button id="oneCellShip" class="type-of-ship" onClick={chooseShipFromList}>
-							одна клетка
+							Одноклеточные корабли {countShips.oneCellShip}
 						</button>
 						<button id="twoCellShip" class="type-of-ship" onClick={chooseShipFromList}>
-							две клетки
+							Двухклеточные корабли {countShips.twoCellShip}
 						</button>
 						<button id="threeCellShip" class="type-of-ship" onClick={chooseShipFromList}>
-							три клетки
+							Трёхклеточные корабли {countShips.threeCellShip}
 						</button>
 						<button id="fourCellShip" class="type-of-ship" onClick={chooseShipFromList}>
-							четыре клетки
+							Четырёхклеточные корабли {countShips.fourCellShip}
 						</button>
 					</div>
 					<Board />

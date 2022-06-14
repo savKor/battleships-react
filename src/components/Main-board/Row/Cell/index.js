@@ -4,7 +4,7 @@ import {
 	selectState,
 	updateArrayOfCellsDisplaedOnMap,
 	updateArrayOfForbiddenCells,
-	updateChoosenShipType,
+	updateChosenShipType,
 	updateCountShips,
 	updateShipsOnMap,
 	updateStateAreYouChooseTheShip
@@ -20,7 +20,7 @@ export function Cells({ rowIndex, colums }) {
 	const shipPosition = store.shipPosition;
 	const arrayOfCellsDisplaedOnMap = store.arrayOfCellsDisplaedOnMap;
 	const stateAreYouChooseTheShip = store.stateAreYouChooseTheShip;
-	const choosenShipType = store.choosenShipType;
+	const chosenShipType = store.chosenShipType;
 	const arrayOfForbiddenCells = store.arrayOfForbiddenCells;
 	const shipsOnMap = store.shipsOnMap;
 
@@ -52,7 +52,7 @@ export function Cells({ rowIndex, colums }) {
 
 	function getIdsOfShip(row, column, setShipOrNot) {
 		let shipIds = [];
-		for (let i = 0; i < choosenShipType[0]; i++) {
+		for (let i = 0; i < chosenShipType[0]; i++) {
 			let shipElement = getIdOfCell(i, row, column, setShipOrNot);
 			if (shipElement !== false) {
 				shipIds.push(shipElement);
@@ -100,8 +100,8 @@ export function Cells({ rowIndex, colums }) {
 	}
 
 	function addCoordinates(idsOfShip) {
-		const key = choosenShipType[2];
-		if (idsOfShip.length === choosenShipType[0] && countShips[key] !== choosenShipType[1]) {
+		const key = chosenShipType[2];
+		if (idsOfShip.length === chosenShipType[0] && countShips[key] !== chosenShipType[1]) {
 			dispatch(updateArrayOfCellsDisplaedOnMap([]));
 			dispatch(updateCountShips(key));
 			for (let i = 0; i < idsOfShip.length; i++) {
@@ -109,8 +109,8 @@ export function Cells({ rowIndex, colums }) {
 				addIdsOfCellsWhereYouCantAddShipNow(idsOfShip[i]);
 			}
 			dispatch(updateStateAreYouChooseTheShip(false));
-			dispatch(updateChoosenShipType([]));
-		} else if (countShips[key] === choosenShipType[1]) {
+			dispatch(updateChosenShipType([]));
+		} else if (countShips[key] === chosenShipType[1]) {
 			alert('Все корабли этого типа уже были добавлены. Выберите другой корабль');
 		} else {
 			alert('нельзя тут ставить корабль');
