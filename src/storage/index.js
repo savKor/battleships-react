@@ -7,3 +7,5 @@ export function getRowAndColumn(cellId) {
 	coordinates.push(columnIndex, rowIndex);
 	return coordinates;
 }
+
+export const getCellId = (colId, rowId) => `${colId}_${rowId}`;

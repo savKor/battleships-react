@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 
 const count = {
 	oneCellShip: 0,
@@ -14,7 +14,7 @@ export const counterSlice = createSlice({
 		chosenShipType: [],
 		stateAreYouChooseTheShip: false,
 		countShips: count,
-		arrayOfCellsDisplaedOnMap: [],
+		arrayOfCellsDisplayedOnMap: [],
 		arrayOfForbiddenCells: [],
 		shipsOnMap: [],
 		username: null,
@@ -42,8 +42,8 @@ export const counterSlice = createSlice({
 			state.countShips = countShips;
 		},
 
-		updateArrayOfCellsDisplaedOnMap: (state, action) => {
-			state.arrayOfCellsDisplaedOnMap = action.payload;
+		updateArrayOfCellsDisplayedOnMap: (state, action) => {
+			state.arrayOfCellsDisplayedOnMap = action.payload;
 		},
 
 		updateArrayOfForbiddenCells: (state, action) => {
@@ -79,7 +79,7 @@ export const {
 	updateChosenShipType,
 	updateStateAreYouChooseTheShip,
 	updateCountShips,
-	updateArrayOfCellsDisplaedOnMap,
+	updateArrayOfCellsDisplayedOnMap,
 	updateArrayOfForbiddenCells,
 	updateShipsOnMap,
 	updateUsername,
@@ -94,5 +94,10 @@ export const incrementAsync = (action, fn) => (dispatch) => {
 };
 
 export const selectState = (state) => state.storage;
+
+export const checkedCellsSelector = createSelector(selectState, (state) => state.checkedCells);
+
+export const dataForTheGameSelector = createSelector(selectState, (state) => state.dataForTheGame);
+export const usernameSelector = createSelector(selectState, (state) => state.username);
 
 export default counterSlice.reducer;

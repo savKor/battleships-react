@@ -1,24 +1,5 @@
 import { counter, playersData, turn, winner } from './storage';
 
-const http = require('http');
-const express = require('express');
-const WebSocket = require('ws');
-
-const app = express();
-
-const server = http.createServer(app);
-
-export const wss = new WebSocket.Server({ server });
-
-const StateMachine = require('javascript-state-machine');
-
-wss.getUniqueID = function() {
-	function s4() {
-		return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-	}
-	return s4() + s4() + '-' + s4();
-};
-
 const getDataObject = (id) => ({
 	userId: id,
 	username: null,
@@ -38,11 +19,6 @@ const getDataObjectForClient = () => ({
 	winner: winner
 });
 
-let turn;
-let winner;
-let counter = 0;
-let playersData = [];
-
 function workWithData(data) {
 	if (ws.id === undefined) {
 		console.log('ты не можешь зайти');
@@ -51,6 +27,8 @@ function workWithData(data) {
 		const dataOfThePlayer = playersData.find((x) => x.userId === ws.id);
 		if (stagesOfTheGame.state === 'registration') {
 			counter += 1;
+			const newUser = getDataObject(ws.id, data);
+			playersData.push(newUser);
 			dataOfThePlayer.username = data;
 			if (counter === 2) {
 				stagesOfTheGame.login();
@@ -146,29 +124,3 @@ const stagesOfTheGame = new StateMachine({
 		}
 	}
 });
-
-wss.on('connection', (ws) => {
-	ws.send();
-
-	if (playersData.length < 2) {
-		ws.id = wss.getUniqueID();
-		console.log(`New client connected with id: ${ws.id}`);
-		const newUser = getDataObject(ws.id);
-		playersData.push(newUser);
-	} else {
-		console.log('Страница уже занята двумя игроками');
-	}
-
-	ws.onmessage = ({ data }) => {
-		const data = JSON.parse(data);
-		workWithData(data);
-	};
-
-	ws.onclose = function() {
-		console.log(`Client ${ws.id} has disconnected!`);
-		const data = playersData.filter((data) => data.userId != ws.id);
-		playersData = data;
-	};
-});
-
-server.listen(8082, () => console.log('Server started'));

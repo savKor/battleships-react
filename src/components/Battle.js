@@ -21,13 +21,7 @@ export function BattlePage() {
 	};
 
 	if (dataForTheGame === null) {
-		battle = (
-			<div className="lds-facebook">
-				<div />
-				<div />
-				<div />
-			</div>
-		);
+		battle = <div className="loader" />;
 	} else if (winner !== null) {
 		battle = <div id="main">Победитель {winner}</div>;
 	} else {

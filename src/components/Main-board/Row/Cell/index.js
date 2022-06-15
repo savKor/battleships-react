@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	selectState,
-	updateArrayOfCellsDisplaedOnMap,
+	updateArrayOfCellsDisplayedOnMap,
 	updateArrayOfForbiddenCells,
 	updateChosenShipType,
 	updateCountShips,
 	updateShipsOnMap,
 	updateStateAreYouChooseTheShip
 } from '../../../../features/counter/storageSlice';
-import { getRowAndColumn } from '../../../../storage';
+import { getCellId, getRowAndColumn } from '../../../../storage';
 
 export function Cells({ rowIndex, colums }) {
 	const [ classForCell ] = useState('cell');
@@ -18,7 +18,7 @@ export function Cells({ rowIndex, colums }) {
 
 	const countShips = store.countShips;
 	const shipPosition = store.shipPosition;
-	const arrayOfCellsDisplaedOnMap = store.arrayOfCellsDisplaedOnMap;
+	const arrayOfCellsDisplayedOnMap = store.arrayOfCellsDisplayedOnMap;
 	const stateAreYouChooseTheShip = store.stateAreYouChooseTheShip;
 	const chosenShipType = store.chosenShipType;
 	const arrayOfForbiddenCells = store.arrayOfForbiddenCells;
@@ -42,7 +42,7 @@ export function Cells({ rowIndex, colums }) {
 		for (let j = column - 1; j <= column + 1; j++) {
 			let columnIndex = j;
 			if (0 <= columnIndex && columnIndex < 10) {
-				let idOfCellWhereYouCanNoLongerAddShip = columnIndex + '_' + rowIndex;
+				let idOfCellWhereYouCanNoLongerAddShip = getCellId(columnIndex, rowIndex);
 				if (!arrayOfForbiddenCells.find((id) => idOfCellWhereYouCanNoLongerAddShip === id)) {
 					dispatch(updateArrayOfForbiddenCells(idOfCellWhereYouCanNoLongerAddShip));
 				}
@@ -62,7 +62,7 @@ export function Cells({ rowIndex, colums }) {
 		return shipIds;
 	}
 
-	function getIdOfCell(cycleNumber, row, column, setShipOrNot) {
+	function getIdOfCell(checkShipSizeToPutCellInCertainPlace, row, column, setShipOrNot) {
 		const value = {
 			column,
 			row
@@ -70,17 +70,17 @@ export function Cells({ rowIndex, colums }) {
 
 		const key = shipPosition === 'horizontal' ? 'column' : 'row';
 
-		if (cycleNumber === 0) {
+		if (checkShipSizeToPutCellInCertainPlace === 0) {
 			value[key] = value[key];
-		} else if (cycleNumber % 2 === 0) {
+		} else if (checkShipSizeToPutCellInCertainPlace % 2 === 0) {
 			value[key] = value[key] + 1;
-		} else if (cycleNumber >= 3) {
+		} else if (checkShipSizeToPutCellInCertainPlace >= 3) {
 			value[key] = value[key] + 2;
 		} else {
 			value[key] = value[key] - 1;
 		}
 
-		const cellId = value['row'] + '_' + value['column'];
+		const cellId = getCellId(value['row'], value['column']);
 		const shipId = checkIfYouCanAddShipOnThisCell(cellId, value[key], setShipOrNot);
 
 		return shipId;
@@ -88,7 +88,7 @@ export function Cells({ rowIndex, colums }) {
 
 	function checkIfYouCanAddShipOnThisCell(cellId, changeOnBoard, setShipOrNot) {
 		let shipElement;
-		let idInForbiddenArray = setShipOrNot === true ? arrayOfForbiddenCells.find((id) => cellId === id) : false;
+		let idInForbiddenArray = setShipOrNot === true ? arrayOfForbiddenCells.some((id) => cellId === id) : false;
 
 		if (idInForbiddenArray || changeOnBoard < 0 || 10 <= changeOnBoard) {
 			shipElement = false;
@@ -102,7 +102,7 @@ export function Cells({ rowIndex, colums }) {
 	function addCoordinates(idsOfShip) {
 		const key = chosenShipType[2];
 		if (idsOfShip.length === chosenShipType[0] && countShips[key] !== chosenShipType[1]) {
-			dispatch(updateArrayOfCellsDisplaedOnMap([]));
+			dispatch(updateArrayOfCellsDisplayedOnMap([]));
 			dispatch(updateCountShips(key));
 			for (let i = 0; i < idsOfShip.length; i++) {
 				dispatch(updateShipsOnMap(idsOfShip[i]));
@@ -120,7 +120,6 @@ export function Cells({ rowIndex, colums }) {
 	function addShipOnMap(e) {
 		const rowAndColumn = getRowAndColumn(e.target.id);
 		if (stateAreYouChooseTheShip === true) {
-			e.target.onmouseover;
 			const setOrNot = true;
 			let idsOfShip = getIdsOfShip(rowAndColumn[0], rowAndColumn[1], setOrNot);
 			addCoordinates(idsOfShip);
@@ -133,23 +132,23 @@ export function Cells({ rowIndex, colums }) {
 		let cellId = getRowAndColumn(e.target.id);
 		const setOrNot = false;
 		let idsOfShip = getIdsOfShip(cellId[0], cellId[1], setOrNot);
-		dispatch(updateArrayOfCellsDisplaedOnMap(idsOfShip));
+		dispatch(updateArrayOfCellsDisplayedOnMap(idsOfShip));
 	}
 
 	function addListenersToShowTheShip(e) {
 		if (stateAreYouChooseTheShip === true) {
 			handleOnMouseOverOnBoard(e);
 			e.target.onmouseout = () => {
-				dispatch(updateArrayOfCellsDisplaedOnMap([]));
+				dispatch(updateArrayOfCellsDisplayedOnMap([]));
 			};
 		}
 	}
 
 	for (let j = 0; j < colums.length; j++) {
 		let columnIndex = j;
-		let cellId = rowIndex + '_' + columnIndex;
+		let cellId = getCellId(rowIndex, columnIndex);
 		const cellOnMap = shipsOnMap.find((id) => cellId === id);
-		const cellOnMouseOver = arrayOfCellsDisplaedOnMap.find((id) => cellId === id);
+		const cellOnMouseOver = arrayOfCellsDisplayedOnMap.find((id) => cellId === id);
 		const idInForbiddenArray = arrayOfForbiddenCells.find((id) => cellId === id);
 
 		let cellClass = classForCell;
