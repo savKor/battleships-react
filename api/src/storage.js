@@ -1,4 +1,8 @@
-export let turn;
-export let winner;
-export let counter = 0;
-export let playersData = [];
+const reuseData = {
+	turn: null,
+	winner: null,
+	counter: 0,
+	playersData: []
+};
+
+module.exports = reuseData;
