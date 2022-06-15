@@ -32,6 +32,18 @@ export function Cells({ rowIndex, colums, playerNick }) {
 
 	let cells = [];
 
+	function changeCellClass(arrayOfShotShips, arrayOfMissedShot) {
+		let newCellClass;
+		if (arrayOfShotShips.find((id) => cellId === id)) {
+			newCellClass = 'cell-with-ships';
+		} else if (arrayOfMissedShot.find((id) => cellId === id)) {
+			newCellClass = 'cell-toggle-ship';
+		} else {
+			newCellClass = classForCell;
+		}
+		return newCellClass;
+	}
+
 	function checkTheCell(e) {
 		if (winner === null) {
 			const cellId = e.target.id;
@@ -55,7 +67,7 @@ export function Cells({ rowIndex, colums, playerNick }) {
 		let columnIndex = j;
 		let cellId = getCellId(rowIndex, columnIndex);
 
-		let cellClass = classForCell;
+		let cellClass;
 
 		if (playerNick === player1) {
 			cellClass = changeCellClass(arrayOfShotShipsPlayer1, arrayOfMissedShotPlayer1);
@@ -68,14 +80,4 @@ export function Cells({ rowIndex, colums, playerNick }) {
 	}
 
 	return cells;
-}
-
-function changeCellClass(arrayOfShotShips, arrayOfMissedShot) {
-	let cellClass;
-	if (arrayOfShotShips.find((id) => cellId === id)) {
-		cellClass = 'cell-with-ships';
-	} else if (arrayOfMissedShot.find((id) => cellId === id)) {
-		cellClass = 'cell-toggle-ship';
-	}
-	return cellClass;
 }
