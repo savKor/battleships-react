@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ws } from '../../../../App';
 import {
 	checkedCellsSelector,
 	dataForTheGameSelector,
-	selectState,
-	updateCheckedCells
+	updateCheckedCells,
+	usernameSelector
 } from '../../../../features/counter/storageSlice';
 import { getCellId } from '../../../../storage';
 
 export function Cells({ rowIndex, colums, playerNick }) {
-	const [ classForCell ] = useState('cell');
-	const store = useSelector(selectState);
 	const dispatch = useDispatch();
-	// const checkedCells = store.checkedCells;
-	const username = store.username;
+	const username = useSelector(usernameSelector);
 	const dataForTheGame = useSelector(dataForTheGameSelector);
 
 	const checkedCells = useSelector(checkedCellsSelector);
@@ -23,7 +20,6 @@ export function Cells({ rowIndex, colums, playerNick }) {
 		turn,
 		winner,
 		player1,
-		player2,
 		arrayOfMissedShotPlayer1,
 		arrayOfMissedShotPlayer2,
 		arrayOfShotShipsPlayer1,
@@ -32,19 +28,17 @@ export function Cells({ rowIndex, colums, playerNick }) {
 
 	let cells = [];
 
-	function changeCellClass(arrayOfShotShips, arrayOfMissedShot) {
-		let newCellClass;
-		if (arrayOfShotShips.find((id) => cellId === id)) {
-			newCellClass = 'cell-with-ships';
-		} else if (arrayOfMissedShot.find((id) => cellId === id)) {
-			newCellClass = 'cell-toggle-ship';
+	function setClass(cellId) {
+		let cellClass;
+		if (playerNick === player1) {
+			cellClass = getCellClass(arrayOfShotShipsPlayer1, arrayOfMissedShotPlayer1, cellId);
 		} else {
-			newCellClass = classForCell;
+			cellClass = getCellClass(arrayOfShotShipsPlayer2, arrayOfMissedShotPlayer2, cellId);
 		}
-		return newCellClass;
+		return cellClass;
 	}
 
-	function checkTheCell(e) {
+	function checkTheCellIfYouHitShipOrNot(e) {
 		if (winner === null) {
 			const cellId = e.target.id;
 			const cellThatNotInArray = !checkedCells.some((id) => cellId === id);
@@ -67,17 +61,25 @@ export function Cells({ rowIndex, colums, playerNick }) {
 		let columnIndex = j;
 		let cellId = getCellId(rowIndex, columnIndex);
 
-		let cellClass;
+		let cellClass = setClass(cellId);
 
-		if (playerNick === player1) {
-			cellClass = changeCellClass(arrayOfShotShipsPlayer1, arrayOfMissedShotPlayer1);
-		} else if (playerNick === player2) {
-			cellClass = changeCellClass(arrayOfShotShipsPlayer2, arrayOfMissedShotPlayer2);
-		}
-
-		const cell = <div id={cellId} className={cellClass} onClick={checkTheCell} />;
+		const cell = <div id={cellId} className={cellClass} onClick={checkTheCellIfYouHitShipOrNot} />;
 		cells[j] = cell;
 	}
 
 	return cells;
+}
+
+function getCellClass(arrayOfShotShips, arrayOfMissedShot, cellId) {
+	let newCellClass;
+	const missedShot = arrayOfMissedShot.some((id) => cellId === id);
+	const hit = arrayOfShotShips.some((id) => cellId === id);
+	if (hit) {
+		newCellClass = 'cell-with-ships';
+	} else if (missedShot) {
+		newCellClass = 'cell-toggle-ship';
+	} else {
+		newCellClass = 'cell';
+	}
+	return newCellClass;
 }
