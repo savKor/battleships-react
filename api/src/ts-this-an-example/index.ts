@@ -1,22 +1,6 @@
+// Boot Server
+const port = process.env.PORT || config.port;
 
-interface DataObjectDetails {
-    userId: string;
-    username: string;
-    ships: string[];
-    arrayOfShotShips: string[];
-    arrayOfMissedShot: string[];
-    };
-
-
-
-function returnObject(id:string) {
-	let object:DataObjectDetails = {
-		userId: id,
-		username: "null",
-		ships: [],
-		arrayOfShotShips: [],
-		arrayOfMissedShot: []
-	}
-
-	return object
-}
+server.listen(port, () => {
+	console.log('Server running on', port);
+});

@@ -1,6 +1,6 @@
 const gameData = require('./gameData');
 
-const getDataForThePlayers = () => ({
+const getGameInformationForUsers = () => ({
 	player1: gameData.playersData[0].username,
 	player2: gameData.playersData[1].username,
 	arrayOfMissedShotPlayer1: gameData.playersData[0].arrayOfMissedShot,
@@ -11,4 +11,4 @@ const getDataForThePlayers = () => ({
 	winner: gameData.winner
 });
 
-module.exports = getDataForThePlayers;
+module.exports = getGameInformationForUsers;
