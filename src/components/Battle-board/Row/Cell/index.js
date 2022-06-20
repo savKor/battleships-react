@@ -39,7 +39,7 @@ export function Cells({ rowIndex, colums, playerNick }) {
 	}
 
 	function checkTheCellIfYouHitShipOrNot(e) {
-		if (winner === null) {
+		if (winner === 'null') {
 			const cellId = e.target.id;
 			const cellThatNotInArray = !checkedCells.some((id) => cellId === id);
 			if (username === playerNick && username === turn && cellThatNotInArray === true) {

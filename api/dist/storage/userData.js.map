@@ -1,0 +1,1 @@
+{"version":3,"file":"userData.js","sourceRoot":"","sources":["../../src/storage/userData.ts"],"names":[],"mappings":";;;AAOK,CAAC;AAIN,SAAgB,WAAW,CAAC,EAAS;IACpC,IAAI,QAAQ,GAAqB;QAChC,MAAM,EAAE,EAAE;QACV,QAAQ,EAAE,MAAM;QAChB,KAAK,EAAE,EAAE;QACT,gBAAgB,EAAE,EAAE;QACpB,iBAAiB,EAAE,EAAE;KACrB,CAAA;IAED,OAAO,QAAQ,CAAA;AAChB,CAAC;AAVD,kCAUC"}

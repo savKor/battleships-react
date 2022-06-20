@@ -22,7 +22,7 @@ export function BattlePage() {
 
 	if (dataForTheGame === null) {
 		battle = <div className="loader" />;
-	} else if (winner !== null) {
+	} else if (winner !== 'null') {
 		battle = <div id="main">Победитель {winner}</div>;
 	} else {
 		battle = (
