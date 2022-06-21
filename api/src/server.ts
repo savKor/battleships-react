@@ -13,12 +13,11 @@ export const server = http.createServer(app);
 const wss = new WebSocketInstance.Server({ server });
 
 wss.on('connection', (ws) => {
-	const userID = getUniqueID()
+	const userID = getUniqueID();
 
 	userConnection(userID);
 
 	ws.onmessage = (message) => {
-
 		const dataParsed: string | string[] = JSON.parse(message.data.toString());
 		const dataAboutStatusOfTheGameForUsers = reportTheStatusOfTheGameStage(dataParsed, userID);
 		if (dataAboutStatusOfTheGameForUsers !== undefined) {

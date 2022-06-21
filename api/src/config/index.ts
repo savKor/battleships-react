@@ -1,7 +1,7 @@
 interface ConfigDetails {
-    port: number
-    };
+	port: number;
+}
 
-export const config:ConfigDetails = {
+export const config: ConfigDetails = {
 	port: 8082
 };

@@ -1,20 +1,18 @@
-import { gameData } from "./gameData"
-
+import { gameData } from './gameData';
 
 export interface GameInfoDetails {
-    player1: string
-    player2: string
-	arrayOfMissedShotPlayer1: string[]
-	arrayOfMissedShotPlayer2: string[]
-	arrayOfShotShipsPlayer1: string[]
-	arrayOfShotShipsPlayer2: string[]
-	turn: string
-	winner: string
-    };
+	player1: string;
+	player2: string;
+	arrayOfMissedShotPlayer1: string[];
+	arrayOfMissedShotPlayer2: string[];
+	arrayOfShotShipsPlayer1: string[];
+	arrayOfShotShipsPlayer2: string[];
+	turn: string;
+	winner: string;
+}
 
 export function getGameInformationForUsers() {
-
-	let gameInfo:GameInfoDetails = {
+	let gameInfo: GameInfoDetails = {
 		player1: gameData.playersData[0].username,
 		player2: gameData.playersData[1].username,
 		arrayOfMissedShotPlayer1: gameData.playersData[0].arrayOfMissedShot,
@@ -23,8 +21,7 @@ export function getGameInformationForUsers() {
 		arrayOfShotShipsPlayer2: gameData.playersData[1].arrayOfShotShips,
 		turn: gameData.turn,
 		winner: gameData.winner
-	}
+	};
 
-	return gameInfo
-	
+	return gameInfo;
 }

@@ -1,22 +1,19 @@
-
 export interface DataObjectDetails {
-    userId: string;
-    username: string;
-    ships: string[];
-    arrayOfShotShips: string[];
-    arrayOfMissedShot: string[];
-    };
+	userId: string;
+	username: string;
+	ships: string[];
+	arrayOfShotShips: string[];
+	arrayOfMissedShot: string[];
+}
 
-
-
-export function getUserData(id:string) {
-	let userData:DataObjectDetails = {
+export function getUserData(id: string) {
+	let userData: DataObjectDetails = {
 		userId: id,
-		username: "null",
+		username: 'null',
 		ships: [],
 		arrayOfShotShips: [],
 		arrayOfMissedShot: []
-	}
+	};
 
-	return userData
+	return userData;
 }

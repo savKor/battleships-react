@@ -1,5 +1,5 @@
-import { config } from "./config";
-import { server } from "./server";
+import { config } from './config';
+import { server } from './server';
 
 // Boot Server
 const port = process.env.PORT || config.port;

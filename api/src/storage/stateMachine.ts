@@ -1,7 +1,6 @@
-import { getGameInformationForUsers } from "./dataForUsers";
-import { gameData } from "./gameData";
-import { DataObjectDetails } from "./userData";
-
+import { getGameInformationForUsers } from './dataForUsers';
+import { gameData } from './gameData';
+import { DataObjectDetails } from './userData';
 const StateMachine = require('javascript-state-machine');
 
 export const stagesOfTheGame = new StateMachine({
@@ -24,19 +23,19 @@ export const stagesOfTheGame = new StateMachine({
 		onGetInfo: function() {
 			console.log('Ты передал все данные для игры');
 			gameData.turn = gameData.playersData[0].username;
-			gameData.winner = "null";
+			gameData.winner = 'null';
 			gameData.counter = 0;
 			const dataAboutStatusOfTheGameForUsers = getGameInformationForUsers();
 			return dataAboutStatusOfTheGameForUsers;
 		},
-		onPlayer2Turn: function(lifecycle:any, dataOfThePlayer:DataObjectDetails, cell:string) {
+		onPlayer2Turn: function(info: any, dataOfThePlayer: DataObjectDetails, cell: string) {
 			const index = 1;
 			changePlayerTurn(dataOfThePlayer, cell, index);
 			console.log('Второй игрок теперь ходит');
 			const dataAboutStatusOfTheGameForUsers = getGameInformationForUsers();
 			return dataAboutStatusOfTheGameForUsers;
 		},
-		onPlayer1Turn: function(lifecycle:any, dataOfThePlayer:DataObjectDetails, cell:string) {
+		onPlayer1Turn: function(info: any, dataOfThePlayer: DataObjectDetails, cell: string) {
 			const index = 0;
 			changePlayerTurn(dataOfThePlayer, cell, index);
 			console.log('Первый игрок теперь ходит');
@@ -49,8 +48,8 @@ export const stagesOfTheGame = new StateMachine({
 	}
 });
 
-function changePlayerTurn(dataOfThePlayer:DataObjectDetails, cell:string, index:number) {
+function changePlayerTurn(dataOfThePlayer: DataObjectDetails, cell: string, index: number) {
+	console.log(dataOfThePlayer);
 	dataOfThePlayer.arrayOfMissedShot.push(cell);
 	gameData.turn = gameData.playersData[index].username;
 }
-

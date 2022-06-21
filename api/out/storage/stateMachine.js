@@ -29,14 +29,14 @@ exports.stagesOfTheGame = new StateMachine({
             const dataAboutStatusOfTheGameForUsers = (0, dataForUsers_1.getGameInformationForUsers)();
             return dataAboutStatusOfTheGameForUsers;
         },
-        onPlayer2Turn: function (lifecycle, dataOfThePlayer, cell) {
+        onPlayer2Turn: function (info, dataOfThePlayer, cell) {
             const index = 1;
             changePlayerTurn(dataOfThePlayer, cell, index);
             console.log('Второй игрок теперь ходит');
             const dataAboutStatusOfTheGameForUsers = (0, dataForUsers_1.getGameInformationForUsers)();
             return dataAboutStatusOfTheGameForUsers;
         },
-        onPlayer1Turn: function (lifecycle, dataOfThePlayer, cell) {
+        onPlayer1Turn: function (info, dataOfThePlayer, cell) {
             const index = 0;
             changePlayerTurn(dataOfThePlayer, cell, index);
             console.log('Первый игрок теперь ходит');
@@ -49,6 +49,7 @@ exports.stagesOfTheGame = new StateMachine({
     }
 });
 function changePlayerTurn(dataOfThePlayer, cell, index) {
+    console.log(dataOfThePlayer);
     dataOfThePlayer.arrayOfMissedShot.push(cell);
     gameData_1.gameData.turn = gameData_1.gameData.playersData[index].username;
 }

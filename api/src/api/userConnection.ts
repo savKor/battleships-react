@@ -1,5 +1,5 @@
-import { gameData } from "../storage/gameData";
-import { getUserData } from "../storage/userData";
+import { gameData } from '../storage/gameData';
+import { getUserData } from '../storage/userData';
 
 export function getUniqueID() {
 	function s4() {
@@ -17,4 +17,3 @@ export function userConnection(userId: string) {
 		console.log('Страница уже занята двумя игроками');
 	}
 }
-

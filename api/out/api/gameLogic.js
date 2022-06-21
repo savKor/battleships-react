@@ -9,18 +9,19 @@ function reportTheStatusOfTheGameStage(data, userId) {
         console.log('ты не можешь зайти');
     }
     else {
-        let dataOfTheEnemy = gameData_1.gameData.playersData.find((x) => x.userId !== userId);
-        let dataOfThePlayer = gameData_1.gameData.playersData.find((x) => x.userId === userId);
-        if (typeof dataOfThePlayer !== "undefined") {
-            if (stateMachine_1.stagesOfTheGame.state === 'registration' && typeof data === "string") {
+        const dataOfThePlayer = gameData_1.gameData.playersData.find((x) => x.userId === userId);
+        if (typeof dataOfThePlayer !== 'undefined') {
+            const dataOfTheEnemy = gameData_1.gameData.playersData.find((x) => x.userId !== userId);
+            if (stateMachine_1.stagesOfTheGame.state === 'registration' && typeof data === 'string') {
                 gameData_1.gameData.counter += 1;
                 dataOfThePlayer.username = data;
                 if (gameData_1.gameData.counter === 2) {
+                    console.log('уж точно все зашли');
                     const playersRegistrationStatus = stateMachine_1.stagesOfTheGame.login();
                     return playersRegistrationStatus;
                 }
             }
-            else if (stateMachine_1.stagesOfTheGame.state === 'putShips' && typeof data !== "string") {
+            else if (stateMachine_1.stagesOfTheGame.state === 'putShips' && typeof data !== 'string') {
                 gameData_1.gameData.counter += 1;
                 dataOfThePlayer.ships = data;
                 if (gameData_1.gameData.counter === 2) {
@@ -28,14 +29,11 @@ function reportTheStatusOfTheGameStage(data, userId) {
                     return gameDataForUsers;
                 }
             }
-        }
-        else if (typeof dataOfTheEnemy !== "undefined" &&
-            typeof dataOfThePlayer !== "undefined" &&
-            typeof data === "string" &&
-            stateMachine_1.stagesOfTheGame.state !== 'putShips' &&
-            stateMachine_1.stagesOfTheGame.state !== 'registration') {
-            const updatedGameDataForUsers = checkIfYouHitShipOrNot(dataOfTheEnemy, dataOfThePlayer, data);
-            return updatedGameDataForUsers;
+            else if (typeof data === 'string' && typeof dataOfTheEnemy !== 'undefined') {
+                console.log('игрок ходит');
+                const updatedGameDataForUsers = checkIfYouHitShipOrNot(dataOfTheEnemy, dataOfThePlayer, data);
+                return updatedGameDataForUsers;
+            }
         }
     }
 }
@@ -43,8 +41,8 @@ exports.reportTheStatusOfTheGameStage = reportTheStatusOfTheGameStage;
 function checkIfYouHitShipOrNot(dataOfTheEnemy, dataOfThePlayer, data) {
     let updatedGameDataForUsers;
     const cell = data;
-    const hitInShip = dataOfTheEnemy.ships.find((x) => x === cell);
-    if (hitInShip) {
+    const hitInShip = dataOfTheEnemy.ships.some((x) => x === cell);
+    if (hitInShip === true) {
         updatedGameDataForUsers = checkIfYouWinOrNot(dataOfThePlayer, cell);
         return updatedGameDataForUsers;
     }
